@@ -2,5 +2,4 @@ numpy==1.26.4
 pedalboard==0.9.5
 pillow==10.3.0
 pyo==1.0.5
-six==1.16.0s
 wxPython==4.2.1

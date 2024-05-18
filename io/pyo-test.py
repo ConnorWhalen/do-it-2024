@@ -1,5 +1,9 @@
 import colorsys
 from pyo import *
+import time
+import serial
+
+port = serial.Serial('/dev/cu.usbserial-0001', 115200)
 
 s = Server(nchnls=1).boot()
 
@@ -31,7 +35,7 @@ cs.ctrl(title="Colour selector")
 
 def rms_to_rgb(*amplitudes):
     angle = cs.voice.get() * 2.0 * math.pi
-
+    print(angle)
     r_in = amplitudes[0]
     g_in = amplitudes[1]
     b_in = amplitudes[2]
@@ -43,12 +47,14 @@ def rms_to_rgb(*amplitudes):
         h -= 2.0 * math.pi
 
     r, g, b = colorsys.hsv_to_rgb(h, s, v)
+    r, g, b = tuple(map(lambda x: int((x*255.0)//1), (r, g, b)))
 
+    port.write(f"{r}, {g}, {b}".encode())
     print(f"IN:  {r_in} {g_in} {b_in}")
     print(f"OUT: {r} {g} {b}")
 
 # Reports RMS of each band and passes them into callback function
-rms = RMS(mb, function=print_rms)
+rms = RMS(mb, function=rms_to_rgb)
 rms.polltime(1)
 
 s.gui(locals())
