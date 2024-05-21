@@ -3,7 +3,7 @@ import time
 import random
 COMMA = ','
 # open a serial connection
-s = serial.Serial("/dev/ttyACM0", 115200)
+s = serial.Serial("/dev/cu.usbmodem21301", 115200) # Replace with path to usb port
 
 def rand_8bit():
     return random.randint(0, 255)
@@ -20,7 +20,7 @@ while True:
 
     send_integers_as_string(s, rand_8bit(), rand_blue(), rand_blue())
     time.sleep(0.5)
-    s.write(b"255,5,4\n")
+    # s.write(b"255,5,4\n")
     time.sleep(0.5)
     # time.sleep(1)
     # s.write(b"0,0,254\n")
